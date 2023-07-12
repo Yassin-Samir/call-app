@@ -1,11 +1,13 @@
 console.log(location.hostname);
+const callBtn = document.querySelector(".call-btn");
+const hangupBtn = document.querySelector(".hangup-btn");
 const peer = new Peer(
   "" +
     Math.floor(Math.random() * 2 ** 18)
       .toString(36)
       .padStart(4, 0),
   {
-    host: location.hostname,
+    host: "localhost",
     debug: 1,
     port: 8000,
     path: "/myapp",
@@ -31,26 +33,29 @@ peer.on("open", function () {
 function showCallContent() {
   window.caststatus.textContent = `Your device ID is: ${peer.id}`;
   callBtn.hidden = false;
-  audioContainer.hidden = true;
+  hangupBtn.hidden = true;
+  window.remoteAudio.srcObject = null;
+  window.peerStream = null;
 }
 function showConnectedContent() {
   window.caststatus.textContent = `You're connected`;
   callBtn.hidden = true;
-  /*  audioContainer.hidden = false; */
+  hangupBtn.hidden = false;
+  conn.on("close", showCallContent);
 }
 let code;
 function getStreamCode() {
   code = window.prompt("Please enter the sharing code");
 }
-function connectPeers() {
-  const conn = peer.connect(code);
-}
+
 let conn;
+function connectPeers() {
+  conn = peer.connect(code);
+}
 peer.on("connection", function (connection) {
   conn = connection;
 });
 
-const callBtn = document.querySelector(".call-btn");
 callBtn.addEventListener("click", function () {
   getStreamCode();
   connectPeers();
@@ -71,12 +76,16 @@ peer.on("call", function (call) {
     call.answer(window.localStream); // B
     showConnectedContent(); // C
     call.on("stream", function (stream) {
-      // D
       window.remoteAudio.srcObject = stream;
       window.remoteAudio.autoplay = true;
       window.peerStream = stream;
     });
-  } else {
-    console.log("call denied"); // E
+    return;
   }
+  console.log("call denied"); // E
+});
+hangupBtn.addEventListener("click", (e) => {
+  console.log({ conn });
+  conn.close();
+  showCallContent();
 });
