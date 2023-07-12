@@ -19,7 +19,7 @@ console.log(__dirname);
 app.use(express.static(path.join(__dirname)));
 
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/index.html");
+  response.json({ fd: "fd" });
 });
 
 console.log("Listening on: " + port);
