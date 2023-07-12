@@ -1,9 +1,9 @@
-const express = require("express");
-const http = require("http");
-const path = require("path");
+import express from "express";
+import path from "path";
+import { createServer } from "http";
+import { ExpressPeerServer } from "peer";
 const app = express();
-const server = http.createServer(app);
-const { ExpressPeerServer } = require("peer");
+const server = createServer(app);
 const port = process.env.PORT || "8000";
 
 const peerServer = ExpressPeerServer(server, {
@@ -13,9 +13,9 @@ const peerServer = ExpressPeerServer(server, {
   port: 8000,
   ssl: {},
 });
-console.log(peerServer);
 
 app.use(peerServer);
+const __dirname = new URL(".", import.meta.url).pathname;
 
 app.use(express.static(path.join(__dirname)));
 
