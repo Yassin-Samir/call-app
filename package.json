@@ -1,0 +1,22 @@
+{
+  "name": "walkie-talkie-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "nodemon ./",
+    "dev": "vite --host"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "peer": "^1.0.0",
+    "peerjs": "^1.4.7"
+  },
+  "devDependencies": {
+    "fs": "^0.0.1-security",
+    "vite": "^4.4.3"
+  }
+}
