@@ -1,6 +1,6 @@
-console.log(location.hostname);
 const callBtn = document.querySelector(".call-btn");
 const hangupBtn = document.querySelector(".hangup-btn");
+const musicEffect = document.querySelector(".loading");
 const peer = new Peer(
   "" +
     Math.floor(Math.random() * 2 ** 18)
@@ -32,6 +32,9 @@ peer.on("open", function () {
 });
 function showCallContent() {
   window.caststatus.textContent = `Your device ID is: ${peer.id}`;
+  musicEffect.classList.contains("hidden")
+    ? null
+    : musicEffect.classList.add("hidden");
   callBtn.hidden = false;
   hangupBtn.hidden = true;
   window.remoteAudio.srcObject = null;
@@ -39,6 +42,7 @@ function showCallContent() {
 }
 function showConnectedContent() {
   window.caststatus.textContent = `You're connected`;
+  musicEffect.classList.remove("hidden");
   callBtn.hidden = true;
   hangupBtn.hidden = false;
   conn.on("close", showCallContent);
@@ -82,6 +86,7 @@ peer.on("call", function (call) {
     });
     return;
   }
+  alert("call denied");
   console.log("call denied"); // E
 });
 hangupBtn.addEventListener("click", (e) => {
