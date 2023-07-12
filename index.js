@@ -1,10 +1,9 @@
 import express from "express";
 import path from "path";
-import { createServer } from "http";
 import { ExpressPeerServer } from "peer";
 const app = express();
-const server = createServer(app);
 const port = process.env.PORT || "8000";
+const server = app.listen(port);
 
 const peerServer = ExpressPeerServer(server, {
   proxied: true,
@@ -15,14 +14,13 @@ const peerServer = ExpressPeerServer(server, {
 });
 
 app.use(peerServer);
-const __dirname = new URL(".", import.meta.url).pathname;
-
+const __dirname = new URL(".", import.meta.url).pathname.substring(1);
+console.log(__dirname);
 app.use(express.static(path.join(__dirname)));
 
 app.get("/", (request, response) => {
   response.sendFile(__dirname + "/index.html");
 });
 
-app.listen(port);
 console.log("Listening on: " + port);
 export default app;
