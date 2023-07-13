@@ -7,7 +7,7 @@ const peer = new Peer(
       .toString(36)
       .padStart(4, 0),
   {
-    host: "localhost",
+    host: "192.168.1.23",
     debug: 1,
     port: 8000,
     path: "/myapp",
@@ -64,7 +64,6 @@ callBtn.addEventListener("click", function () {
   getStreamCode();
   connectPeers();
   const call = peer.call(code, window.localStream); // A
-
   call.on("stream", function (stream) {
     // B
     window.remoteAudio.srcObject = stream; // C
@@ -74,8 +73,10 @@ callBtn.addEventListener("click", function () {
   });
 });
 peer.on("call", function (call) {
-  const answerCall = confirm("Do you want to answer?"); // A
+  if (window.remoteAudio.srcObject) return;
 
+  console.log({ call });
+  const answerCall = confirm("Do you want to answer?"); // A
   if (answerCall) {
     call.answer(window.localStream); // B
     showConnectedContent(); // C
@@ -86,7 +87,7 @@ peer.on("call", function (call) {
     });
     return;
   }
-  alert("call denied");
+  call.close();
   console.log("call denied"); // E
 });
 hangupBtn.addEventListener("click", (e) => {
