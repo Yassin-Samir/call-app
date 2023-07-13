@@ -54,6 +54,10 @@ function getStreamCode() {
 
 let conn;
 function connectPeers() {
+  if (code === peer.id) {
+    alert("you can't call your self");
+    return true;
+  }
   conn = peer.connect(code);
 }
 peer.on("connection", function (connection) {
@@ -62,7 +66,8 @@ peer.on("connection", function (connection) {
 
 callBtn.addEventListener("click", function () {
   getStreamCode();
-  connectPeers();
+  const isSamePeerId = connectPeers();
+  if (isSamePeerId) return;
   const call = peer.call(code, window.localStream); // A
   call.on("stream", function (stream) {
     // B
