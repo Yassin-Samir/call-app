@@ -7,7 +7,7 @@ const peer = new Peer(
       .toString(36)
       .padStart(4, 0),
   {
-    host: "192.168.1.23",
+    host: "localhost",
     debug: 1,
     port: 8000,
     path: "/myapp",
